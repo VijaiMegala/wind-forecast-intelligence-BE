@@ -51,13 +51,13 @@ Configuration is read from environment variables:
 | Variable | Default | Purpose |
 | --- | --- | --- |
 | `ELEXON_BASE_URL` | `https://data.elexon.co.uk/bmrs/api/v1` | Elexon BMRS API base URL |
-| `FRONTEND_ORIGINS` | `http://localhost:3000` | Comma-separated CORS origins |
+| `ALLOW_ORIGIN` | `http://localhost:3000` | Allowed browser origin; accepts a comma-separated list |
 
 Example:
 
 ```bash
 ELEXON_BASE_URL=https://data.elexon.co.uk/bmrs/api/v1 \
-FRONTEND_ORIGINS=http://localhost:3000 \
+ALLOW_ORIGIN=http://localhost:3000 \
 uv run fastapi dev main.py
 ```
 
