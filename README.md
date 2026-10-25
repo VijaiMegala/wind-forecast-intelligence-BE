@@ -51,18 +51,20 @@ Configuration is read from environment variables:
 | Variable | Default | Purpose |
 | --- | --- | --- |
 | `ELEXON_BASE_URL` | `https://data.elexon.co.uk/bmrs/api/v1` | Elexon BMRS API base URL |
-| `ALLOW_ORIGIN` | `http://localhost:3000` | Allowed browser origin; accepts a comma-separated list |
 
 Example:
 
 ```bash
 ELEXON_BASE_URL=https://data.elexon.co.uk/bmrs/api/v1 \
-ALLOW_ORIGIN=http://localhost:3000 \
 uv run fastapi dev main.py
 ```
 
 Do not add a trailing slash to `ELEXON_BASE_URL` unless the deployment proxy
 requires it; the client normalises the value internally.
+
+CORS currently permits requests from every origin using `allow_origins=["*"]`.
+Credentialed cross-origin requests are disabled. Restrict this policy to known
+frontend origins before exposing authenticated or private endpoints.
 
 ## API endpoints
 
@@ -159,7 +161,8 @@ the decision deadline and does not match different delivery timestamps.
 
 ## Production operation
 
-Set explicit CORS origins and run the ASGI application using the organisation's
-standard process manager or container runtime. Ensure outbound HTTPS access to
-Elexon is available and configure frontend deployments to use this service's
-`/api/v1` base URL.
+Run the ASGI application using the organisation's standard process manager or
+container runtime. Ensure outbound HTTPS access to Elexon is available and
+configure frontend deployments to use this service's `/api/v1` base URL. Before
+adding authentication or private data, replace wildcard CORS with explicit
+trusted origins.

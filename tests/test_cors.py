@@ -6,7 +6,7 @@ from app.main import app
 client = TestClient(app)
 
 
-def test_configured_origin_is_allowed() -> None:
+def test_any_origin_is_allowed() -> None:
     response = client.options(
         "/health",
         headers={
@@ -16,10 +16,10 @@ def test_configured_origin_is_allowed() -> None:
     )
 
     assert response.status_code == 200
-    assert response.headers["access-control-allow-origin"] == "http://localhost:3000"
+    assert response.headers["access-control-allow-origin"] == "*"
 
 
-def test_unknown_origin_is_not_allowed() -> None:
+def test_unknown_origin_is_also_allowed() -> None:
     response = client.options(
         "/health",
         headers={
@@ -28,4 +28,6 @@ def test_unknown_origin_is_not_allowed() -> None:
         },
     )
 
-    assert "access-control-allow-origin" not in response.headers
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == "*"
+    assert "access-control-allow-credentials" not in response.headers
